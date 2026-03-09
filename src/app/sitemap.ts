@@ -57,6 +57,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             const slug = `${slugBase}-${detail.id}`;
             const image = detail.backdrop_path ? `https://image.tmdb.org/t/p/w1280${detail.backdrop_path}` : `https://image.tmdb.org/t/p/w500${detail.poster_path}`;
 
+            // Validasi format tanggal YYYY-MM-DD
+            const rawDate = detail.release_date || detail.first_air_date || item.updatedAt.toISOString();
+            const publicationDate = new Date(rawDate).toISOString().split("T")[0];
+
             // Entry Detail dengan Image Sitemap
             entries.push({
                 url: `${SITE_URL}/${type}/${slug}`,
@@ -66,22 +70,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 images: [image],
             });
 
-            // Entry Watch dengan Video Sitemap (Sangat Powerful untuk Google Video Search)
+            // Entry Watch tanpa video tag yang bermasalah (player_loc == loc)
+            // Google melarang player_loc sama dengan URL halaman itu sendiri
             entries.push({
                 url: `${SITE_URL}/${type}/${slug}/watch`,
                 lastModified: new Date(item.updatedAt),
                 changeFrequency: "weekly",
                 priority: 0.7,
-                videos: [
-                    {
-                        title: `Watch ${title} Online Free - ZFN Cinema`,
-                        thumbnail_loc: image,
-                        description: detail.overview?.slice(0, 150) || `Stream ${title} in high quality on ZFN Cinema.`,
-                        player_loc: `${SITE_URL}/${type}/${slug}/watch`,
-                        publication_date: detail.release_date || detail.first_air_date || item.updatedAt.toISOString(),
-                        family_friendly: "yes",
-                    },
-                ],
             });
         } catch (e) {
             // Skip
