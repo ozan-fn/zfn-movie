@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+model Movie {
+    id                Int
+    title             String
+    original_title    String
+    overview          String  @db.Text
+    backdrop_path     String?
+    poster_path       String?
+    media_type        String?
+    original_language String
+    release_date      String?
+    popularity        Float
+    vote_average      Float
+    vote_count        Int
+    adult             Boolean
+    video             Boolean
+
+    // Kolom tambahan untuk keperluan Cache & Kategori
+    category  String
+    updatedAt DateTime @updatedAt
+
+    @@id([id, category])
+}
+
+model SearchCache {
+    id        String   @id // Format: "query_page" (contoh: "batman_1")
+    data      String   @db.Text // Hasil response TMDB yang di-stringify (JSON)
+    updatedAt DateTime @updatedAt
+}
+
+model DetailCache {
+    id        String   @id // Formatnya nanti: "movie_12345" atau "tv_12345"
+    data      String   @db.Text // Menyimpan response utuh dari TMDB (JSON String)
+    updatedAt DateTime @updatedAt
+}
