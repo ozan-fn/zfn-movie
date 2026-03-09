@@ -3,6 +3,7 @@ import { MovieSection } from "@/components/movie-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Tv } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 const SITE_URL = "https://zfn-movie.vercel.app";
 
@@ -81,18 +82,18 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
                             value="movies"
                             className="rounded-xl px-8 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300 gap-2 font-black italic"
                             render={
-                                <a href="/?type=movies">
+                                <Link href="/?type=movies" className="flex items-center gap-2">
                                     <Film className="h-4 w-4" /> MOVIES
-                                </a>
+                                </Link>
                             }
                         />
                         <TabsTrigger
                             value="tv"
                             className="rounded-xl px-8 py-2.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-300 gap-2 font-black italic"
                             render={
-                                <a href="/?type=tv">
+                                <Link href="/?type=tv" className="flex items-center gap-2">
                                     <Tv className="h-4 w-4" /> TV SHOWS
-                                </a>
+                                </Link>
                             }
                         />
                     </TabsList>

@@ -12,14 +12,18 @@ interface VideoPlayerProps {
     title: string;
 }
 
+const ALLOWED_SERVERS = ["vidking 2", "autoembed", "vidsrc 1", "vidsrc 2", "vidsrc 3", "vidsrc 5"];
+
 export function VideoPlayer({ players, title }: VideoPlayerProps) {
-    const [activePlayer, setActivePlayer] = useState(players[0]);
+    const filteredPlayers = players.filter((player) => ALLOWED_SERVERS.includes(player.title.toLowerCase()));
+
+    const [activePlayer, setActivePlayer] = useState(filteredPlayers[0] || players[0]);
     const [isLoading, setIsLoading] = useState(false);
 
     // Reset to the first player when players array changes (e.g., episode change)
     useEffect(() => {
         setIsLoading(true);
-        setActivePlayer(players[0]);
+        setActivePlayer(filteredPlayers[0] || players[0]);
         // Small delay to ensure iframe re-renders properly
         const timer = setTimeout(() => setIsLoading(false), 500);
         return () => clearTimeout(timer);
@@ -35,8 +39,8 @@ export function VideoPlayer({ players, title }: VideoPlayerProps) {
                     </div>
                 ) : (
                     <iframe
-                        key={activePlayer.source} // Key forces iframe refresh
-                        src={activePlayer.source}
+                        key={activePlayer?.source} // Key forces iframe refresh
+                        src={activePlayer?.source}
                         className="h-full w-full"
                         allowFullScreen
                         allow="autoplay; encrypted-media"
@@ -47,18 +51,18 @@ export function VideoPlayer({ players, title }: VideoPlayerProps) {
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold italic uppercase tracking-tight">
-                        Select Server <span className="text-primary italic">— {activePlayer.title}</span>
+                        Select Server <span className="text-primary italic">— {activePlayer?.title}</span>
                     </h2>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {players.map((player) => (
+                    {filteredPlayers.map((player) => (
                         <button
                             key={player.title}
                             onClick={() => setActivePlayer(player)}
-                            className={cn("flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-black italic transition-all duration-300 border uppercase tracking-wider", activePlayer.title === player.title ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105" : "bg-muted/50 text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground")}
+                            className={cn("flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-black italic transition-all duration-300 border uppercase tracking-wider", activePlayer?.title === player.title ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105" : "bg-muted/50 text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground")}
                         >
-                            <Play className={cn("h-3 w-3", activePlayer.title === player.title ? "fill-current" : "")} />
+                            <Play className={cn("h-3 w-3", activePlayer?.title === player.title ? "fill-current" : "")} />
                             {player.title}
                         </button>
                     ))}

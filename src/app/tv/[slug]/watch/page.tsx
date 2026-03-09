@@ -65,7 +65,8 @@ export default async function TvWatchPage({ params, searchParams }: { params: Pr
     const series = await getTvDetails(slug);
     if (!series) return <div>TV Show not found</div>;
 
-    const players = getTvShowPlayers(id, seasonNum, episodeNum);
+    const idNum = series.id?.toString() || id;
+    const players = getTvShowPlayers(idNum, seasonNum, episodeNum);
 
     return (
         <div className="relative min-h-screen">

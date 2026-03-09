@@ -57,7 +57,8 @@ export default async function MovieWatchPage({ params }: { params: Promise<{ slu
     const movie = await getMovieDetails(slug);
     if (!movie) return <div>Movie not found</div>;
 
-    const players = getMoviePlayers(id);
+    const idNum = movie.id?.toString() || id;
+    const players = getMoviePlayers(idNum);
 
     return (
         <div className="relative min-h-screen">
