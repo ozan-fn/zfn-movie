@@ -2,6 +2,7 @@ import * as movieApi from "./action";
 import { MovieSection } from "@/components/movie-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Tv } from "lucide-react";
+import { AdBanner } from "@/components/ad-banner";
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
     const { type } = await searchParams;
@@ -15,6 +16,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
     return (
         <main className="container mx-auto py-10 px-4 space-y-12 max-w-7xl">
+            <AdBanner />
             <div className="space-y-4">
                 <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic uppercase underline decoration-primary decoration-8 underline-offset-8">
                     EXPLORE <span className="text-primary italic">ZFN</span>

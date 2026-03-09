@@ -7,6 +7,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { TrailerDialog } from "@/components/trailer-dialog";
 import Link from "next/link";
+import { AdBanner } from "@/components/ad-banner";
 
 export default async function MovieDetailPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string }> }) {
     const [{ slug }, { from }] = await Promise.all([params, searchParams]);
@@ -32,6 +33,7 @@ export default async function MovieDetailPage({ params, searchParams }: { params
 
     return (
         <div className="relative min-h-screen">
+            <AdBanner />
             {/* Backdrop Section */}
             <div className="absolute inset-0 h-[70vh] w-full">
                 <Image src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} alt={movie.title} fill priority className="object-cover opacity-20 blur-sm" />
