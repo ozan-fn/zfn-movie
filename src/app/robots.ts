@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: "/",
             disallow: ["/api/", "/_next/"],
         },
-        sitemap: "https://zfn-movie.vercel.app/sitemap.xml",
+        sitemap: "https://zfn-movie.vercel.app/sitemap-v2.xml",
     };
 }

@@ -3,9 +3,6 @@ import prisma from "@/lib/prisma";
 
 const SITE_URL = "https://zfn-movie.vercel.app";
 
-export const revalidate = 3600;
-export const dynamic = "force-dynamic";
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const cacheData = await prisma.detailCache.findMany({
         select: {
