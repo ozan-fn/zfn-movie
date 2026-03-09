@@ -49,6 +49,7 @@ export default function RootLayout({
                         </div>
                     </TooltipProvider>
                 </ThemeProvider>
+                <Script src="https://pl28878135.effectivegatecpm.com/86/a6/dc/86a6dcc62e6908f4c0143064d5803244.js" strategy="lazyOnload" />
             </body>
         </html>
     );
