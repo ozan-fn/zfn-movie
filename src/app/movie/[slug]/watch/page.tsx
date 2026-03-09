@@ -4,7 +4,6 @@ import { VideoPlayer } from "@/components/video-player";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { AdBanner } from "@/components/ad-banner";
 import type { Metadata, ResolvingMetadata } from "next";
 import { generateMetadataTags } from "@/lib/mini-ai";
 

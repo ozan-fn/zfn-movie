@@ -4,7 +4,6 @@ import { VideoPlayer } from "@/components/video-player";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { AdBanner } from "@/components/ad-banner";
 import type { Metadata, ResolvingMetadata } from "next";
 import { EpisodeSelector } from "@/components/episode-selector";
 import { generateMetadataTags } from "@/lib/mini-ai";
@@ -102,7 +101,6 @@ export default async function TvWatchPage({ params, searchParams }: { params: Pr
                     <VideoPlayer players={players} title={`${series.name} S${seasonNum} E${episodeNum}`} />
 
                     {/* Simple Episodes Selector info - since we don't have season/episode picker yet */}
-                    <AdBanner />
                 </div>
             </div>
         </div>
