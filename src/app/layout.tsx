@@ -7,6 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -32,6 +33,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className={cn("font-sans", inter.variable)} suppressHydrationWarning>
+            <head>
+                <Script defer src="https://cloud.umami.is/script.js" data-website-id="807f7a9f-5092-4ea7-b283-dc7b553a187a" />
+            </head>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                     <TooltipProvider>
