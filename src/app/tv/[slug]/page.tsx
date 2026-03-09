@@ -8,8 +8,57 @@ import { Button } from "@/components/ui/button";
 import { TrailerDialog } from "@/components/trailer-dialog";
 import Link from "next/link";
 import { AdBanner } from "@/components/ad-banner";
+import type { Metadata, ResolvingMetadata } from "next";
+import { generateMetadataTags } from "@/lib/mini-ai";
+import { EpisodeSelector } from "@/components/episode-selector";
 
-export default async function TvDetailPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string }> }) {
+type Props = {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ from?: string }>;
+};
+
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+    const { slug } = await params;
+    const series = await getTvDetails(slug);
+
+    if (!series) return { title: "TV Show Not Found" };
+
+    const tags = generateMetadataTags(series, "tv");
+    const previousImages = (await parent).openGraph?.images || [];
+    const backdrop = series.backdrop_path ? `https://image.tmdb.org/t/p/w1280${series.backdrop_path}` : "";
+
+    return {
+        title: `${series.name} - ZFN TV`,
+        description: series.overview?.slice(0, 160) || `Watch ${series.name} full seasons and episodes on ZFN. High quality TV show streaming.`,
+        keywords: tags,
+        alternates: {
+            canonical: `/tv/${slug}`,
+        },
+        openGraph: {
+            title: `${series.name} - ZFN TV`,
+            description: series.overview?.slice(0, 200) || `Watch all seasons of ${series.name} on ZFN.`,
+            images: [
+                {
+                    url: backdrop,
+                    width: 1280,
+                    height: 720,
+                    alt: series.name,
+                },
+                ...previousImages,
+            ],
+            type: "video.tv_show",
+            siteName: "ZFN Cinema",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${series.name} - ZFN TV`,
+            description: series.overview?.slice(0, 200) || `Watch ${series.name} episodes online.`,
+            images: [backdrop],
+        },
+    };
+}
+
+export default async function TvDetailPage({ params, searchParams }: Props) {
     const [{ slug }, { from }] = await Promise.all([params, searchParams]);
     const series = await getTvDetails(slug);
     const backHref = from === "tv" ? "/?type=tv" : "/";
@@ -51,7 +100,7 @@ export default async function TvDetailPage({ params, searchParams }: { params: P
                 </Link>
                 <div className="flex flex-col gap-12 lg:flex-row">
                     {/* Poster Sidebar */}
-                    <div className="w-full shrink-0 lg:w-[350px]">
+                    <div className="w-full shrink-0 lg:w-87.5">
                         <div className="sticky top-24 overflow-hidden rounded-3xl shadow-2xl shadow-primary/10 border border-primary/10 ring-1 ring-white/10">
                             <AspectRatio ratio={2 / 3}>
                                 <Image src={`https://image.tmdb.org/t/p/w780${series.poster_path}`} alt={title} fill className="object-cover" />
@@ -93,11 +142,12 @@ export default async function TvDetailPage({ params, searchParams }: { params: P
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-4 items-center">
                             {trailer && <TrailerDialog trailerKey={trailer.key} title={title} />}
-                            <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-lg font-bold border-2 hover:bg-muted/50 transition-all">
-                                ADD TO WATCHLIST
+                            <Button size="lg" className="rounded-full px-8 h-14 text-lg font-bold shadow-xl shadow-primary/20 bg-primary hover:scale-105 transition-transform" render={<Link href={`/tv/${slug}/watch?s=1&e=1`} />}>
+                                <Play className="mr-2 h-6 w-6 fill-current" /> WATCH EPISODE 1
                             </Button>
+                            <EpisodeSelector series={series} slug={slug} />
                         </div>
 
                         <div className="space-y-4 max-w-3xl">

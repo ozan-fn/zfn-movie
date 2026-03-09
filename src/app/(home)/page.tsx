@@ -3,6 +3,58 @@ import { MovieSection } from "@/components/movie-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Tv } from "lucide-react";
 import { AdBanner } from "@/components/ad-banner";
+import type { Metadata } from "next";
+
+const SITE_URL = "https://zfn-movie.vercel.app";
+
+export const metadata: Metadata = {
+    title: "ZFN - Explore Movies and TV Shows",
+    description: "Discover the latest movies and TV shows on ZFN. Trending today, popular picks, and high-rated classics. High-speed streaming with multi-server support.",
+    applicationName: "ZFN Cinema",
+    authors: [{ name: "ZFN Team" }],
+    keywords: ["movies", "tv shows", "streaming", "ZFN", "cinema", "entertainment", "watch movies free", "frieren", "anime streaming"],
+    creator: "ZFN Cinema",
+    publisher: "ZFN Cinema",
+    formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+    },
+    metadataBase: new URL(SITE_URL),
+    openGraph: {
+        title: "ZFN - Explore Movies and TV Shows",
+        description: "Discover the latest movies and TV shows on ZFN. Trending today, popular picks, and high-rated classics.",
+        url: SITE_URL,
+        siteName: "ZFN Cinema",
+        images: [
+            {
+                url: "/og-image.jpg",
+                width: 1200,
+                height: 630,
+                alt: "ZFN Cinema Logo",
+            },
+        ],
+        locale: "en_US",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "ZFN - Explore Movies and TV Shows",
+        description: "Discover the latest movies and TV shows on ZFN. Trending today, popular picks, and high-rated classics.",
+        images: ["/og-image.jpg"],
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+        },
+    },
+};
 
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
     const { type } = await searchParams;
