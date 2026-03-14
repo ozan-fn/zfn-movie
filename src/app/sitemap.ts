@@ -8,6 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         select: {
             id: true,
             title: true,
+            overview: true,
             media_type: true,
             backdrop_path: true,
             poster_path: true,
@@ -57,6 +58,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 changeFrequency: "weekly",
                 priority: 0.7,
                 ...(image && { images: [image] }), // Menambahkan gambar ke dalam sitemap
+                videos: [
+                    {
+                        title: `${title} - Trailer`,
+                        thumbnail_loc: image || "https://zfn-movie.vercel.app/og-image.jpg",
+                        description: movie.overview || `Tonton trailer dan detail dari ${title}`,
+                        player_loc: `${SITE_URL}/${type}/${slug}`, // Merujuk ke halaman tempat trailer berada
+                    },
+                ],
             });
         } catch (e) {
             // Skip
