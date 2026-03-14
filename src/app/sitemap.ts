@@ -4,11 +4,14 @@ import prisma from "@/lib/prisma";
 const SITE_URL = "https://zfn-movie.vercel.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const cacheData = await prisma.detailCache.findMany({
+    const movies = await prisma.movie.findMany({
         select: {
             id: true,
+            title: true,
+            media_type: true,
+            backdrop_path: true,
+            poster_path: true,
             updatedAt: true,
-            data: true,
         },
     });
 
@@ -33,34 +36,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
     ];
 
-    cacheData.forEach((item) => {
+    movies.forEach((movie) => {
         try {
-            const detail = JSON.parse(item.data);
-            const type = item.id.startsWith("movie_") ? "movie" : "tv";
-            const title = detail.title || detail.name;
+            const type = movie.media_type || "movie";
+            const title = movie.title;
             if (!title) return;
 
             const slugBase = title
                 .toLowerCase()
-                .replace(/[^a-z0-0\s-]/g, "")
+                .replace(/[^a-z0-9\s-]/g, "")
+                .trim()
                 .replace(/\s+/g, "-");
-            const slug = `${slugBase}-${detail.id}`;
-            const image = detail.backdrop_path ? `https://image.tmdb.org/t/p/w1280${detail.backdrop_path}` : `https://image.tmdb.org/t/p/w500${detail.poster_path}`;
+            const slug = `${slugBase}-${movie.id}`;
+            const image = movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}` : movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined;
 
             // Halaman Detail
             entries.push({
                 url: `${SITE_URL}/${type}/${slug}`,
-                lastModified: item.updatedAt,
+                lastModified: movie.updatedAt,
                 changeFrequency: "weekly",
                 priority: 0.7,
-            });
-
-            // Halaman Watch
-            entries.push({
-                url: `${SITE_URL}/${type}/${slug}/watch`,
-                lastModified: item.updatedAt,
-                changeFrequency: "weekly",
-                priority: 0.6,
+                ...(image && { images: [image] }), // Menambahkan gambar ke dalam sitemap
             });
         } catch (e) {
             // Skip
