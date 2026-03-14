@@ -34,6 +34,7 @@ export default function RootLayout({
     return (
         <html lang="en" className={cn("font-sans", inter.variable)} suppressHydrationWarning>
             <head>
+                <meta name="yandex-verification" content="88d7675f8ae1330f" />
                 <Script defer src="https://cloud.umami.is/script.js" data-website-id="807f7a9f-5092-4ea7-b283-dc7b553a187a" />
             </head>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
