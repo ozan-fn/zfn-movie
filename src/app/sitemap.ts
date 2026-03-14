@@ -57,15 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 lastModified: movie.updatedAt,
                 changeFrequency: "weekly",
                 priority: 0.7,
-                ...(image && { images: [image] }), // Menambahkan gambar ke dalam sitemap
-                videos: [
-                    {
-                        title: `${title} - Trailer`,
-                        thumbnail_loc: image || "https://zfn-movie.vercel.app/og-image.jpg",
-                        description: movie.overview || `Tonton trailer dan detail dari ${title}`,
-                        player_loc: `${SITE_URL}/${type}/${slug}`, // Merujuk ke halaman tempat trailer berada
-                    },
-                ],
+                ...(image && { images: [image] }),
             });
         } catch (e) {
             // Skip
