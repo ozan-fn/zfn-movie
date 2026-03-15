@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
 
 const SITE_URL = "https://zfn-movie.vercel.app";
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 1000;
 
 export async function generateSitemaps() {
     const totalMovies = await prisma.movie.count();
